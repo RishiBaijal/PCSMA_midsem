@@ -26,8 +26,10 @@ public class CreateDOM {
     {
         Document dom = null;
         File quizFile = null;
-        quizFile = new File(directory + "/Quizzes/" + test+"_quiz.xml");
+        System.out.println("TEST: " + test);
+        quizFile = new File(directory + "/Quizzes/" + test + "_quiz.xml");    
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        System.out.println("The quiz file is: " + quizFile);
         DocumentBuilder db = documentBuilderFactory.newDocumentBuilder();
         try
         {

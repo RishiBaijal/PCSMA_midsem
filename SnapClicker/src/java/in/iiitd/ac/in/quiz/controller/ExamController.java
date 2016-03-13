@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -33,23 +35,7 @@ public class ExamController extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ExamController</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ExamController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
+//
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -60,24 +46,10 @@ public class ExamController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        //processRequest(request, response);
-        doPost(request, response);
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
+//    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         boolean finish = false;
         HttpSession session = request.getSession();
         try
@@ -87,6 +59,11 @@ public class ExamController extends HttpServlet {
                 session = request.getSession();
                 String selectedExam = (String) request.getSession().getAttribute("exam");
                 System.out.println("Exam: " + selectedExam);
+                //session.setAttribute("currentExam", );
+                Exam exam = new Exam(selectedExam);
+                session.setAttribute("currentExam", exam);
+                
+                
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/DD HH:mm:ss a");
                 Date date = new Date();
                 String started = simpleDateFormat.format(date);
@@ -98,70 +75,121 @@ public class ExamController extends HttpServlet {
             e.printStackTrace();
         }
         
-        Exam exam = (Exam) request.getSession().getAttribute("currentExam");
-        if (exam.currentQuestion == 0)
+        Exam exam1 = (Exam) request.getSession().getAttribute("currentExam");
+        System.out.println("WORKS FINE TILL HERE COCKSUCKER!!");
+//        System.out.println("THE CURRENT QUESTION IS: " + exam.currentQuestion);
+//        if (exam.currentQuestion == 0)
+//        {
+//            try {
+//                throw new Exception("Sucks a mighty cocksickle.");
+//            } catch (Exception ex) {
+//                Logger.getLogger(ExamController.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        }
+        
+        System.out.println("The question list: ");
+        System.out.println(exam1.dom.toString());
+        if (exam1.currentQuestion == 0)
         {
-            exam.setQuestion(exam.currentQuestion);
-            QuizQuestion question = exam.questionList.get(exam.currentQuestion);
+            System.out.println("THE CURRENT QUESTION IS: " + exam1.currentQuestion);
+            exam1.setQuestion(exam1.currentQuestion);
+            QuizQuestion question = exam1.questionList.get(exam1.currentQuestion);
             session.setAttribute("question", question);
             
             
         }
         String action=request.getParameter("action");
-			
+		
+        
+        System.out.println("Action: " + action + ", " + request.getParameter("minute"));
+        int minute = -1;
+        int second = -1;
+        if (request.getParameter("minute") != null && request.getParameter("second") != null)
+        {
+            System.out.println("MINUTE" + request.getParameter("minute"));
+            System.out.println("SECOND " + request.getParameter("second"));
+            
+            minute = Integer.parseInt(request.getParameter("minute"));
+            second = Integer.parseInt(request.getParameter("second"));
+            request.getSession().setAttribute("min", minute);
+            request.getSession().setAttribute("sec", second);
+            
+        }
 	String radio=request.getParameter("answer");
 	int selectedRadio=-1;
-	exam.selections.put(exam.currentQuestion, selectedRadio);
+	exam1.selections.put(exam1.currentQuestion, selectedRadio);
 	if("1".equals(radio))
 	{
 		selectedRadio=1;
-		exam.selections.put(exam.currentQuestion, selectedRadio);
+		exam1.selections.put(exam1.currentQuestion, selectedRadio);
 		System.out.println("You selected "+selectedRadio);
 	}
 	else if("2".equals(radio))
 	{
 		selectedRadio=2;
-		exam.selections.put(exam.currentQuestion, selectedRadio);
+		exam1.selections.put(exam1.currentQuestion, selectedRadio);
 		System.out.println("You selected "+selectedRadio);
 	}
 	else if("3".equals(radio))
 	{
 		selectedRadio=3;
-		exam.selections.put(exam.currentQuestion, selectedRadio);
+		exam1.selections.put(exam1.currentQuestion, selectedRadio);
 		System.out.println("You selected "+selectedRadio);
 	}
 	else if("4".equals(radio))
 	{
 		selectedRadio=4;
-		exam.selections.put(exam.currentQuestion, selectedRadio);
+		exam1.selections.put(exam1.currentQuestion, selectedRadio);
 		System.out.println("You selected "+selectedRadio);
 	}
 	
         if("Next".equals(action)){
-		exam.currentQuestion++;
-        	exam.setQuestion(exam.currentQuestion);
-                QuizQuestion q=exam.questionList.get(exam.currentQuestion);
+		exam1.currentQuestion++;
+        	exam1.setQuestion(exam1.currentQuestion);
+                QuizQuestion q=exam1.questionList.get(exam1.currentQuestion);
                 session.setAttribute("quest",q);
 	}
 	else if("Previous".equals(action))
-	{   System.out.println("You clicked Previous Button");
-		exam.currentQuestion--;
-				exam.setQuestion(exam.currentQuestion);
-			    QuizQuestion q=exam.questionList.get(exam.currentQuestion);	
-				session.setAttribute("quest",q);
-			}
-			else if("Finish Exam".equals(action))
-			{   finish=true;
-				int result=exam.calculateResult(exam);				
-				request.setAttribute("result",result);
-				request.getSession().setAttribute("currentExam",null);
-				request.getRequestDispatcher("/WEB-INF/jsps/result.jsp").forward(request,response);
-				
-			}
+	{   
+            System.out.println("You clicked Previous Button");
+            exam1.currentQuestion--;
+            exam1.setQuestion(exam1.currentQuestion);
+            QuizQuestion q=exam1.questionList.get(exam1.currentQuestion);	
+            session.setAttribute("quest",q);
+        }
+        else if("Finish Exam".equals(action) || (minute == 0 && second == 0))
+        {
+            finish=true;
+            int result=exam1.calculateResult(exam1);				
+            request.setAttribute("result",result);
+            request.getSession().setAttribute("currentExam",null);
+            request.getRequestDispatcher("/result.jsp").forward(request,response);
+        }
 						
-		if(finish!=true){
-		request.getRequestDispatcher("/WEB-INF/jsps/exam.jsp").forward(request,response);
-		}
+        if(finish!=true){
+            request.getRequestDispatcher("/exam.jsp").forward(request,response);
+        }
+        //processRequest(request, response);
+//           try {
+//                throw new Exception("Sucks a mighty cocksickle.");
+//            } catch (Exception ex) {
+//                Logger.getLogger(ExamController.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+        //doPost(request, response);
+    }
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        doPost(request, response);
 
     }
 

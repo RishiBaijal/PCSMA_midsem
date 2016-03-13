@@ -99,7 +99,7 @@ Logged as <a href="#" class="button username">${sessionScope.user}</a>
 <table cellpadding="0" cellspacing="50">
 
 <tr>
-<td><a href="takeExam?test=pscma"><img height="200" width="200" src="${pageContext.request.contextPath}/Images/pcsma.jpg"/></a></td>
+<td><a href="takeExam?test=pcsma"><img height="200" width="200" src="${pageContext.request.contextPath}/Images/pcsma.jpg"/></a></td>
 <td><a href="takeExam?test=mobilecomputing"><img height="200" width="200" src="${pageContext.request.contextPath}/Images/mc.jpg"/></a></td>
 <td><a href="takeExam?test=networksecurity"><img height="200" width="200" src="${pageContext.request.contextPath}/Images/ns.jpg"/></a></td>
 <td><a href="takeExam?test=introtoprogramming"><img height="200" width="200" src="${pageContext.request.contextPath}/Images/python.jpg"/></a></td>

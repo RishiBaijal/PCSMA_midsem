@@ -88,7 +88,7 @@ public class RegistrationController extends HttpServlet {
         try
         {
             Statement statement = connection.createStatement();
-            String sql = "INSERT INTO users values (NULL, '"+username+"','"+password+"','"+email+"')";
+            String sql = "INSERT INTO users values (NULL, '"+username+"','"+email+"','"+password+"')";
             System.out.println(sql);
             statement.executeUpdate(sql);
         }

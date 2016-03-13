@@ -5,14 +5,19 @@
  */
 package in.iiitd.ac.in.quiz.controller;
 
+import in.iiitd.ac.in.quiz.CreateDOM;
+import in.iiitd.ac.in.quiz.Exam;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.annotation.*;
+import org.w3c.dom.Document;
 
 
 /**
@@ -21,7 +26,8 @@ import javax.servlet.annotation.*;
  */
 @WebServlet(urlPatterns = { "/login", "/register", "/takeExam", "/logout"})
 public class MainController extends HttpServlet {
-
+    public static int quizTimeMin = 1;
+    public static int quizTimeSec = 0;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -83,11 +89,12 @@ public class MainController extends HttpServlet {
         else if (request.getRequestURI().equals(applicationContextPath + "/takeExam"))
         {
             request.getSession().setAttribute("currentExam", null);
+            request.getSession().setAttribute("quizDuration", null);
+            request.getSession().setAttribute("min", null);
+            request.getSession().setAttribute("sec", null);
             
-            String exam = request.getParameter("test");
-            request.getSession().setAttribute("exam", exam);
             
-            System.out.println(request.getSession().getAttribute("user"));
+//            System.out.println(request.getSession().getAttribute("user"));
             if (request.getSession().getAttribute("user") == null)
             {
                 System.out.println("IT COMES HERE BITCH!!!");
@@ -96,8 +103,33 @@ public class MainController extends HttpServlet {
             }
             else
             {
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/quizDetails.jsp");
-                requestDispatcher.forward(request, response);
+            String exam = request.getParameter("test");
+            request.getSession().setAttribute("exam", exam);
+            Document dom = null;
+            try {
+               // Exam currentExam = new Exam(exam);
+                //request.getSession().setAttribute("currentExam", currentExam);
+                dom = CreateDOM.getDOM(exam);
+                request.getSession().setAttribute("totalNumberOfQuizQuestions",dom.getElementsByTagName("totalQuizQuestions").item(0).getTextContent());
+		request.getSession().setAttribute("quizDuration",dom.getElementsByTagName("quizDuration").item(0).getTextContent());
+		request.getSession().setAttribute("min",dom.getElementsByTagName("quizDuration").item(0).getTextContent());
+		request.getSession().setAttribute("sec",0);
+		
+		System.out.println("Minutes "+request.getSession().getAttribute("min")+"---------------- sec   "+request.getSession().getAttribute("sec"));
+                
+//                System.out.println("CURRENT EXAM COCKSUCKER: " + exam);
+                
+//               // request.getSessi
+//                request.getSession().setAttribute("quizDuration", quizTimeMin * 60 + quizTimeSec);
+//                request.getSession().setAttribute("min", quizTimeMin);
+//                request.getSession().setAttribute("sec", quizTimeSec);
+                
+                System.out.println("Minutes: " + request.getSession().getAttribute("min") + " ---sec--- " + request.getSession().getAttribute("sec"));
+            } catch (Exception ex) {
+                Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/quizDetails.jsp");
+            requestDispatcher.forward(request, response);
             }
             
         }

@@ -22,7 +22,7 @@ import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 public class Exam {
-    	Document dom;
+    	public Document dom;
 	public int currentQuestion=0;	
 	
 	
@@ -31,17 +31,19 @@ public class Exam {
 	
 	public Exam(String test) throws Exception
         {
-		dom=CreateDOM.getDOM(test);
+            dom=CreateDOM.getDOM(test);
+            System.out.println("DOMDOMDOMDOMDOMDOMDOM " + dom.toString());
 	}
 	
 		
 	public void setQuestion(int i)
-	{   int number=i;
-		String options[]=new String[4];
+	{   
+            int number=i;
+            String options[]=new String[4];
 	    String question=null;
 	    int correct=0;
 	    System.out.println("Dom "+dom);
-		NodeList qList=dom.getElementsByTagName("question");
+            NodeList qList=dom.getElementsByTagName("question");
 	    NodeList childList=qList.item(i).getChildNodes();
 	    
 	    int counter=0;

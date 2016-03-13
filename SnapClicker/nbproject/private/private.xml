@@ -4,8 +4,11 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/Users/Apple/NetBeansProjects/SnapClicker/src/java/in/iiitd/ac/in/quiz/controller/MainController.java</file>
+            <file>file:/Users/Apple/NetBeansProjects/SnapClicker/web/exam.jsp</file>
+            <file>file:/Users/Apple/NetBeansProjects/SnapClicker/src/java/in/iiitd/ac/in/quiz/Exam.java</file>
+            <file>file:/Users/Apple/NetBeansProjects/SnapClicker/src/java/in/iiitd/ac/in/quiz/controller/ExamController.java</file>
             <file>file:/Users/Apple/NetBeansProjects/SnapClicker/src/java/in/iiitd/ac/in/quiz/controller/RegistrationController.java</file>
-            <file>file:/Users/Apple/NetBeansProjects/SnapClicker/web/index.jsp</file>
+            <file>file:/Users/Apple/NetBeansProjects/SnapClicker/web/result.jsp</file>
         </group>
     </open-files>
 </project-private>
